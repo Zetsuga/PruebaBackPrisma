@@ -1,7 +1,7 @@
 import { FastifyRequest } from 'fastify';
 import { Prisma } from '@prisma/client';
 
-export interface userDAO{
+export type userDAO ={
     id?:number,
     name:string
 }

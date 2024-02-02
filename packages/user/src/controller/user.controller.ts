@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify"
-import { UserRequest, userDAO } from "../interfaces/user.interface";
+import { UserRequest } from "../interfaces/user.interface";
 import { deleteSensitiveData } from "../utilities/user.utilities";
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient()
@@ -18,9 +18,7 @@ export const getUserById = async(request:FastifyRequest, reply: FastifyReply) =>
         const id : any= request.params;
         const dataUser: any = await prisma.users.findUnique({
             where:{id:id.id}
-        })
-        console.log(dataUser);
-        
+        })        
         reply.code(200).send(await deleteSensitiveData(dataUser))
     } catch (error:any) {
         reply.code(400).send([]);
@@ -29,38 +27,38 @@ export const getUserById = async(request:FastifyRequest, reply: FastifyReply) =>
 
 export const createUser = async(request: FastifyRequest , reply:FastifyReply) => {
     try {
-        const {id,name} : any  = request.body as UserRequest
+        const {name,lastName,adress} : any  = request.body as UserRequest
         const dataUser : any = await prisma.users.create({
             data:{
-                id,
-                name
+                name,
+                lastName,
+                adress
+
             },
         })
         reply.code(200).send(await deleteSensitiveData(dataUser))
-    } catch (error : any) {
+    } catch (error : any) {        
         reply.code(400).send('The operation can\' t be resolve')
     }
 }
 
 export const updateUser =async (request: FastifyRequest , reply:FastifyReply) => {
     try {
-        let {id,name} : any  = request.body as UserRequest
+        let {name,lastName,adress} : any  = request.body as UserRequest
 
-        id = request.params;
-        console.log(id,name);
-        
+        const id : any = request.params;        
         const dataUser : any = await prisma.users.update({
             data:{
-                name:name
+                name:name,
+                lastName:lastName,
+                adress:adress
             },
             where:{
                 id:id.id
             }  
         })
-        console.log(dataUser)
         reply.code(200).send('Updated suscessfully')
     } catch (error:any) {
-        console.log(error)
         reply.code(400).send('The operation can\' t be resolve')
     }
 }
