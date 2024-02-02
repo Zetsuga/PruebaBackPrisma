@@ -1,6 +1,5 @@
-import { ClientRequest, request } from "http";
 import { getAllUser, getUserById, createUser, deleteUser, updateUser } from "../controller/user.controller";
-import { FastifyInstance, FastifyRequest } from "fastify";
+import { FastifyInstance } from "fastify";
 
 async function userRoute(fastify:FastifyInstance) {
 
@@ -26,7 +25,9 @@ async function userRoute(fastify:FastifyInstance) {
         url:'/',
         schema: {
             body:{
-                name:{type:'string'}
+                name:{type:'string'},
+                lastName:{type:'string'},
+                adress:{type:'string'}
             }
         },
         handler: createUser,
