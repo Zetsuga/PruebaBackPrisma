@@ -1,0 +1,34 @@
+{
+  "name": "pruebabackprisma",
+  "version": "1.0.0",
+  "description": "Backend desarrollado con Prisma y typescript",
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:app": "npm run start --workspace=app",
+    "start:user": "npm run start --workspace=user"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zetsuga/PruebaBackPrisma.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^5.8.1",
+    "fastify": "^4.26.0",
+    "moment": "^2.30.1",
+    "nodemon": "^3.0.3",
+    "prisma": "^5.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
