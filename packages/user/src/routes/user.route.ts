@@ -1,5 +1,5 @@
-import { getAllUser, getUserById, getUserProfile, createUser, deleteUser, updateUser } from "../controller/user.controller";
-import { checkTokenJWT, validateUser } from "../middlewares/auth.middleware";
+import { getAllUser, getUserById, getUserProfile, deleteUser, updateUser, chageRoleUser } from "../controller/user.controller";
+import { checkPermission, checkTokenJWT, validateUser } from "../middlewares/auth.middleware";
 import { FastifyInstance } from "fastify";
 
 async function userRoute(fastify:FastifyInstance) {
@@ -14,14 +14,14 @@ async function userRoute(fastify:FastifyInstance) {
             }
         },
 
-        preHandler:[checkTokenJWT,validateUser],
+        preHandler:[checkTokenJWT,validateUser,checkPermission],
         handler: getUserById
     })
 
     fastify.route({
         method: 'GET',
         url:'/',
-        preHandler:[checkTokenJWT,validateUser],
+        preHandler:[checkTokenJWT,validateUser,checkPermission],
         handler: getAllUser
     })
 
@@ -33,28 +33,11 @@ async function userRoute(fastify:FastifyInstance) {
     })
 
     fastify.route({
-        method: 'POST',
-        url:'/',
-        schema: {
-            body:{
-                name:{type:'string'},
-                lastName:{type:'string'},
-                adress:{type:'string'}
-            }
-        },
-        handler: createUser,
-
-    })
-
-    fastify.route({
         method: 'PATCH',
-        url:'/:id',
+        url:'/',
         schema:{
             body:{
                 name:{type:'string'}
-            },
-            params:{
-                id:{type:'number'} 
             }
         },
         preHandler:[checkTokenJWT,validateUser],
@@ -63,14 +46,16 @@ async function userRoute(fastify:FastifyInstance) {
 
     fastify.route({
         method:'DELETE',
-        url:'/:id',
-        schema: {
-            params:{
-                id:{type:'number'}
-            }
-        },
+        url:'/',
         preHandler:[checkTokenJWT,validateUser],
         handler: deleteUser
+    })
+
+    fastify.route({
+        method:'PATCH',
+        url:'/role',
+        preHandler: [checkTokenJWT,validateUser,checkPermission],
+        handler:chageRoleUser
     })
 
 }

@@ -7,7 +7,8 @@ export type userDAO ={
     lastName:string,
     address?:string,
     email?:string,
-    pass?:string
+    pass?:string,
+    role?:string
 }
 
 export interface UserRequest extends FastifyRequest {
