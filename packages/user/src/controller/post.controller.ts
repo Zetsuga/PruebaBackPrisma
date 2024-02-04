@@ -10,8 +10,7 @@ export const getPostById =  async(request:FastifyRequest, reply:FastifyReply)=>{
         const dataPost: any = await prisma.postUser.findUnique({
             where:{id:id.id}
         })
-        console.log(dataPost);
-        
+                
         reply.code(200).send(await formatPostUser(dataPost))
     } catch (error:any) {
         reply.code(400).send([]);
