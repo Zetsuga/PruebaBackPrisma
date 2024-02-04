@@ -1,7 +1,9 @@
-import { getAllUser, getUserById, createUser, deleteUser, updateUser } from "../controller/user.controller";
+import { getAllUser, getUserById, getUserProfile, createUser, deleteUser, updateUser } from "../controller/user.controller";
+import { checkTokenJWT, validateUser } from "../middlewares/auth.middleware";
 import { FastifyInstance } from "fastify";
 
 async function userRoute(fastify:FastifyInstance) {
+    fastify.decorateRequest('authUser','')
 
     fastify.route({
         method: 'GET',
@@ -11,13 +13,23 @@ async function userRoute(fastify:FastifyInstance) {
                 id:{type:'number'}
             }
         },
+
+        preHandler:[checkTokenJWT,validateUser],
         handler: getUserById
     })
 
     fastify.route({
         method: 'GET',
         url:'/',
+        preHandler:[checkTokenJWT,validateUser],
         handler: getAllUser
+    })
+
+    fastify.route({
+        method:'GET',
+        url:'/profile',
+        preHandler:[checkTokenJWT,validateUser],
+        handler:getUserProfile
     })
 
     fastify.route({
@@ -45,6 +57,7 @@ async function userRoute(fastify:FastifyInstance) {
                 id:{type:'number'} 
             }
         },
+        preHandler:[checkTokenJWT,validateUser],
         handler: updateUser
     })
 
@@ -56,6 +69,7 @@ async function userRoute(fastify:FastifyInstance) {
                 id:{type:'number'}
             }
         },
+        preHandler:[checkTokenJWT,validateUser],
         handler: deleteUser
     })
 

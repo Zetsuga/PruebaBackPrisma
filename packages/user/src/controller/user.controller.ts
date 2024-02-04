@@ -1,6 +1,6 @@
-import { FastifyReply, FastifyRequest } from "fastify"
-import { UserRequest } from "../interfaces/user.interface";
 import { deleteSensitiveData } from "../utilities/user.utilities";
+import { UserRequest } from "../interfaces/user.interface";
+import { FastifyReply, FastifyRequest } from "fastify"
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient()
 
@@ -14,44 +14,41 @@ export const  getAllUser = async (request:FastifyRequest,reply:FastifyReply) =>{
 }
 
 export const getUserById = async(request:FastifyRequest, reply: FastifyReply) => {
-    try {        
+    try {
         const id : any= request.params;
+        
         const dataUser: any = await prisma.users.findUnique({
             where:{id:id.id}
-        })        
+        })                
         reply.code(200).send(await deleteSensitiveData(dataUser))
     } catch (error:any) {
         reply.code(400).send([]);
     }
 }
 
-export const createUser = async(request: FastifyRequest , reply:FastifyReply) => {
+export const getUserProfile = async(request:FastifyRequest, reply: FastifyReply) => {
     try {
-        const {name,lastName,adress} : any  = request.body as UserRequest
-        const dataUser : any = await prisma.users.create({
-            data:{
-                name,
-                lastName,
-                adress
-
-            },
-        })
+        const id : any= request['authUser'];
+        
+        const dataUser: any = await prisma.users.findUnique({
+            where:{id:id}
+        })                
         reply.code(200).send(await deleteSensitiveData(dataUser))
-    } catch (error : any) {        
-        reply.code(400).send('The operation can\' t be resolve')
+    } catch (error:any) {
+        reply.code(400).send([]);
     }
 }
 
 export const updateUser =async (request: FastifyRequest , reply:FastifyReply) => {
     try {
-        let {name,lastName,adress} : any  = request.body as UserRequest
+        let {name,lastName,address} : any  = request.body as UserRequest
 
         const id : any = request.params;        
         const dataUser : any = await prisma.users.update({
             data:{
                 name:name,
                 lastName:lastName,
-                adress:adress
+                address:address
             },
             where:{
                 id:id.id
