@@ -2,7 +2,6 @@ import moment from "moment"
 import { postDAO } from "../interfaces/post.interface"
 
 export async function formatPostUser(post: postDAO[] | postDAO){
-    console.log(post)
     try{
         if(Array.isArray(post)){
             return post.map((post)=>{
@@ -21,7 +20,6 @@ function treatDataPost(post : postDAO){
         delete post.id
         delete post.id_user
         post.datetime = moment(post.datetime).format("DD/MM/YYYY")
-        console.log(post);
         
         return post
     } catch (error) {

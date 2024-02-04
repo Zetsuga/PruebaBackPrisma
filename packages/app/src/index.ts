@@ -1,45 +1,17 @@
-import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import fastifyJwt from "@fastify/jwt";
-//import UserRouter from './routes/user.route';
-//import { userSchemas } from "./schema/user.schema";
+import Fastify, { FastifyInstance } from "fastify";
+import loginRoute  from './routes/login.route'
 
-export const app : FastifyInstance = fastify();
+const fastify :FastifyInstance = Fastify({
+    logger:true
+});
 
-declare module "fastify" {
-    export interface FastifyInstance{
-        auth: any
+fastify.register(loginRoute,{prefix:'/login'})
+
+
+fastify.listen({ port: 7000 }, function (err: any, address: any) {
+    if (err) {
+      fastify.log.error(err)
+      process.exit(1)
     }
-}
-
-app.register(fastifyJwt,{
-    secret: 'sokdfjsodfsjn45slvkmslvmpsj3flskdngslr7nlj'
+    fastify.log.info(`Server listening at ${address}`)
 })
-
-app.decorate("auth", 
-    async(req:FastifyRequest,rep:FastifyReply)=>{
-        try {
-            await req.jwtVerify()
-        } catch (err : any) {
-            rep.send(err)   
-        }
-    }
-)
-
-async function main(){
-    
-    //for(const schema of userSchemas){
-    //    app.addSchema(schema);
-    //}
-    
-    //app.register(UserRouter,{prefix:"user"})
-
-    try{
-        await app.listen({port:7001,host:"0.0.0.0"});
-        console.log(`server listening on port: 7000`)
-    }catch(err : any){
-        console.error(err)
-        process.exit(1);
-    }
-}
-
-main()
