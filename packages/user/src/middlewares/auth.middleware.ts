@@ -48,3 +48,21 @@ export const validateUser = async(request: UserRequest, reply:FastifyReply, done
         return reply.code(400).send('Data token not valid')
     }
 }
+
+export const checkPermission = async(request: UserRequest, reply: FastifyReply, done:any) => {
+    try {
+        const dataUser : any = await prisma.users.findUnique(
+            {
+                where:{
+                    id : request['authUser']
+                }
+            }
+        )
+        if(!dataUser || dataUser.role === 'admin'){
+            reply.code(405).send('You dont have permission for this action')
+        }
+        done();
+    } catch (error: any) {
+        return reply.code(400).send('Cont check permissions')
+    }
+}
