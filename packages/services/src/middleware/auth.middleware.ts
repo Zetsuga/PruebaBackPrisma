@@ -2,11 +2,12 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaClient } from '@prisma/client';
 import * as JWT from 'jsonwebtoken'
 import dotenv from 'dotenv'
-import { UserRequest } from "../interfaces/user.interface";
+import { UserRequest } from "../../interfaces/img.interfaces";
 
 dotenv.config()
 const prisma = new PrismaClient()
 const JWT_key : any = process.env.JWT_KEY?process.env.JWT_KEY:'';
+
 
 export const checkTokenJWT = async(request: FastifyRequest, reply:FastifyReply, done: any)=>{
     try{
@@ -42,27 +43,11 @@ export const validateUser = async(request: UserRequest, reply:FastifyReply, done
         if(!userData){
             return reply.code(402).send('Invalid token')
         }
+        console.log(userData.id);
+        
         request.authUser = userData.id;
         done();
     } catch (error) {
         return reply.code(400).send('Data token not valid')
-    }
-}
-
-export const checkPermission = async(request: UserRequest, reply: FastifyReply, done:any) => {
-    try {
-        const dataUser : any = await prisma.users.findUnique(
-            {
-                where:{
-                    id : request['authUser']
-                }
-            }
-        )
-        if(!dataUser || dataUser.role === 'admin'){
-            reply.code(405).send('You dont have permission for this action')
-        }
-        done();
-    } catch (error: any) {
-        return reply.code(400).send('Cont check permissions')
     }
 }

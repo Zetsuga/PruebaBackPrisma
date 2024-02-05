@@ -39,11 +39,9 @@ export const getUserProfile = async(request:FastifyRequest, reply: FastifyReply)
     }
 }
 
-export const updateUser =async (request: FastifyRequest , reply:FastifyReply) => {
+export const updateUser =async (request: UserRequest , reply:FastifyReply) => {
     try {
-        let {name,lastName,address} : any  = request.body as UserRequest
-
-        const id : any = request.params;        
+        const {name,lastName,address} : any  = request.body
         const dataUser : any = await prisma.users.update({
             data:{
                 name:name,
@@ -51,7 +49,7 @@ export const updateUser =async (request: FastifyRequest , reply:FastifyReply) =>
                 address:address
             },
             where:{
-                id:id.id
+                id:request['authUser']
             }  
         })
         reply.code(200).send('Updated suscessfully')
@@ -62,14 +60,30 @@ export const updateUser =async (request: FastifyRequest , reply:FastifyReply) =>
 
 export const deleteUser = async(request: FastifyRequest,reply:FastifyReply) => {
     try {
-        const id : any= request.params;        
         const dataUser : any = await prisma.users.delete({
             where:{
-                id:id.id
+                id:request['authUser']
             }
         })        
         reply.code(200).send('Deleted suscessfully')
     } catch (error : any) {
+        reply.code(400).send('The operation can\' t be resolve')
+    }
+}
+
+export const chageRoleUser = async(request:UserRequest, reply:FastifyReply) => {
+    try {
+        const { role } = request.body
+        const dataUser: any = await prisma.users.update({
+                data:{
+                    role: role
+                },
+                where:{
+                    id:request['authUser']
+                }
+            })
+        reply.code(200).send('Update suscessfully')
+    } catch (error: any) {
         reply.code(400).send('The operation can\' t be resolve')
     }
 }

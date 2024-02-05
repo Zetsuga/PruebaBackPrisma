@@ -17,11 +17,13 @@
     "url": "git+https://github.com/Zetsuga/PruebaBackPrisma.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Jose Antonio Ors Planas",
   "license": "ISC",
   "dependencies": {
+    "@fastify/multipart": "^6.0.0",
     "@prisma/client": "^5.9.1",
     "bcrypt": "^5.1.1",
+    "cloudinary": "^2.0.0",
     "dotenv": "^16.4.1",
     "fastify": "^4.26.0",
     "jsonwebtoken": "^9.0.2",
