@@ -9,6 +9,6 @@
     "start": "nodemon && node --unhandled-rejections=strict ./build/app.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Jose Antonio Ors Planas",
   "license": "ISC"
 }
