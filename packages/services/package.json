@@ -1,12 +1,12 @@
 {
-  "name": "user",
+  "name": "services",
   "version": "1.0.0",
   "description": "",
-  "main": "build/index.js",
+  "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc -w",
-    "start": "nodemon ./src/index.ts"
+    "build":"tsc",
+    "start": "nodemon && node --unhandled-rejections=strict ./build/app.js"
   },
   "keywords": [],
   "author": "Jose Antonio Ors Planas",

@@ -1,5 +1,4 @@
-import { FastifyMiddieOptions } from "@fastify/middie";
-import { LoginRequest } from "../../interface/login.interface";
+import { LoginRequest } from "../interface/login.interface";
 import { PrismaClient } from '@prisma/client';
 import { FastifyReply } from "fastify";
 const prisma = new PrismaClient()
