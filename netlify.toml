@@ -1,0 +1,26 @@
+[build]
+  command = "npm start"  # Utiliza npm start en lugar de npm run build
+  functions = "packages/*/functions"
+
+[[redirects]]
+  from = "/app/*"
+  to = "/packages/app/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/user/*"
+  to = "/packages/user/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/service/*"
+  to = "/packages/service/:splat"
+  status = 200
+
+[build.environment]
+  DATABASE_URL = "postgresql://postgres:O4FxYns6N01O@backend.c3wa6g02wkfd.eu-north-1.rds.amazonaws.com:5432/backend?schema=public"
+  JWT_KEY = 123456789
+  CLOUDINARY_URL = "tu-valor-de-URL-de-Cloudinary"
+  CLOUD_NAME=dcljg8nww,
+  CLOUD_KEY=967215433155685,
+  CLOUD_SECRET=zuBmB2FqJkDRHCzUuZ3gcUaJLEI
