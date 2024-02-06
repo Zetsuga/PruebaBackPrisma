@@ -12,7 +12,8 @@
     "start:app": "cd packages/app && npm start",
     "start:user": "cd packages/user && npm start",
     "start:services": "cd packages/services && npm start",
-    "start":"npm-run-all start:app start:user start:services"
+    "start":"npm-run-all prisma:generate start:app start:user start:services",
+    "prisma:generate": "npx prisma generate"
   },
   "repository": {
     "type": "git",
