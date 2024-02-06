@@ -37,7 +37,11 @@ async function userRoute(fastify:FastifyInstance) {
         url:'/',
         schema:{
             body:{
-                name:{type:'string'}
+                name:{type:'string'},
+                lastName:{type:'string'},
+                address:{type:'string'},
+                email:{type:'string'},
+                pass:{type:'string'}
             }
         },
         preHandler:[checkTokenJWT,validateUser],
@@ -54,6 +58,11 @@ async function userRoute(fastify:FastifyInstance) {
     fastify.route({
         method:'PATCH',
         url:'/role',
+        schema:{
+            body:{
+                role:{type:'string'}
+            },
+        },    
         preHandler: [checkTokenJWT,validateUser,checkPermission],
         handler:chageRoleUser
     })

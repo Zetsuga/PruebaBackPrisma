@@ -1,10 +1,10 @@
-import { PrismaClient } from '@prisma/client';
+import { PostRequest, postDAO } from '../interfaces/post.interface';
+import { formatPostUser } from '../utils/post.utilities';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { formatPostUser } from '../utilities/post.utilities';
-import { PostRequest } from '../interfaces/post.interface';
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient()
 
-export const getPostById =  async(request:FastifyRequest, reply:FastifyReply)=>{
+export const getPostById =  async(request:FastifyRequest, reply:FastifyReply) : Promise<void> =>{
     try {        
         const id : any= request.params;
         const dataPost: any = await prisma.post.findUnique({
@@ -17,7 +17,7 @@ export const getPostById =  async(request:FastifyRequest, reply:FastifyReply)=>{
     }
 }
 
-export const getAllPost =  async(request:FastifyRequest,reply: FastifyReply)=>{    
+export const getAllPost =  async(request:FastifyRequest,reply: FastifyReply) : Promise<void>=>{    
     try {        
         const dataPost:any= await prisma.post.findMany()
         reply.code(200).send(await formatPostUser(dataPost))
@@ -26,15 +26,14 @@ export const getAllPost =  async(request:FastifyRequest,reply: FastifyReply)=>{
     }
 }
 
-export const createPost = async(request:FastifyRequest,reply: FastifyReply) => {
+export const createPost = async(request:FastifyRequest,reply: FastifyReply) : Promise<void>=> {
     try {
         const {title,content} : any  = request.body as PostRequest
-        const id_user : number = 1
         const dataPost : any = await prisma.post.create({
             data:{
-                id_user,
-                title,
-                content
+                id_user: request['authUser'],
+                title:title,
+                content: content
 
             },
         })
@@ -44,7 +43,7 @@ export const createPost = async(request:FastifyRequest,reply: FastifyReply) => {
     }
 }
 
-export const updatePost = async(request:FastifyRequest, reply:FastifyReply) => {
+export const updatePost = async(request:FastifyRequest, reply:FastifyReply) : Promise<void> => {
     try {
         let {title,content} : any  = request.body as PostRequest
 
@@ -64,7 +63,7 @@ export const updatePost = async(request:FastifyRequest, reply:FastifyReply) => {
     }
 }
 
-export const deletePost = async(request:FastifyRequest, reply:FastifyReply) => {
+export const deletePost = async(request:FastifyRequest, reply:FastifyReply) : Promise<void> => {
     try {
         const id : any= request.params;        
         const dataPost : any = await prisma.post.delete({

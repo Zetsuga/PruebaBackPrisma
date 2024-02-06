@@ -1,5 +1,5 @@
+import { postDAO, postWithoutIdDAO } from "../interfaces/post.interface"
 import moment from "moment"
-import { postDAO } from "../interfaces/post.interface"
 
 export async function formatPostUser(post: postDAO[] | postDAO){
     try{
