@@ -1,7 +1,7 @@
-import { imgDownloader, imgUploader } from "../../controller/img.controller";
 import { checkTokenJWT, validateUser } from "../middleware/auth.middleware";
-import { FastifyInstance } from "fastify";
+import { imgDownloader, imgUploader } from "../controller/img.controller";
 import { checkLogo } from "../middleware/img.middleware";
+import { FastifyInstance } from "fastify";
 
 const imgRoute = async(fastify:FastifyInstance) => {
     fastify.decorateRequest('authUser','')
@@ -16,6 +16,11 @@ const imgRoute = async(fastify:FastifyInstance) => {
     fastify.route({
         method:'POST',
         url:'/',
+        schema:{
+            body:{
+                content:{type:`file`}
+            }
+        },
         preHandler:[checkTokenJWT,validateUser,checkLogo],
         handler:imgUploader
     })

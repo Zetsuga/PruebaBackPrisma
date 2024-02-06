@@ -1,6 +1,6 @@
-import { FastifyInstance } from 'fastify'
 import { createUser, loginUser } from '../controller/login.controller';
 import { checkEmail } from '../middleware/login.middleware';
+import { FastifyInstance } from 'fastify'
 
 const loginRoute = async (fastify:FastifyInstance)=>{
 
@@ -22,6 +22,9 @@ const loginRoute = async (fastify:FastifyInstance)=>{
         url:'/create',
         schema:{
             body:{
+                name:{type:'string'},
+                lastName:{type:'string'},
+                address:{type:'string'},
                 email:{type:'string'},
                 pass:{type:'string'}
             }

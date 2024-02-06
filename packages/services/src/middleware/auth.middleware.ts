@@ -1,15 +1,15 @@
+import { UserRequest, userDAO } from "../interfaces/img.interfaces";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaClient } from '@prisma/client';
 import * as JWT from 'jsonwebtoken'
 import dotenv from 'dotenv'
-import { UserRequest } from "../../interfaces/img.interfaces";
 
 dotenv.config()
 const prisma = new PrismaClient()
 const JWT_key : any = process.env.JWT_KEY?process.env.JWT_KEY:'';
 
 
-export const checkTokenJWT = async(request: FastifyRequest, reply:FastifyReply, done: any)=>{
+export const checkTokenJWT = async(request: FastifyRequest, reply:FastifyReply, done: any): Promise<void>=>{
     try{
         let tokenJWT: string | undefined = request.headers.authorization
         tokenJWT = tokenJWT?.replace('Bearer ','');
@@ -17,7 +17,7 @@ export const checkTokenJWT = async(request: FastifyRequest, reply:FastifyReply, 
             return reply.code(402).send('Token not found');
         }
 
-        await new Promise((resolve, reject) => {
+        await new Promise((resolve: any, reject: any) => {
             JWT.verify(tokenJWT, JWT_key, (err: any, decoded: any) => {
                 if (err) {
                     return reject(err);
@@ -35,7 +35,7 @@ export const checkTokenJWT = async(request: FastifyRequest, reply:FastifyReply, 
     }
 }
 
-export const validateUser = async(request: UserRequest, reply:FastifyReply, done: any)=>{
+export const validateUser = async(request: UserRequest, reply:FastifyReply, done: any): Promise<void> =>{
     try {
         let tokenJWT : string | undefined  = request.headers.authorization?.replace('Bearer ','');
 
@@ -49,7 +49,7 @@ export const validateUser = async(request: UserRequest, reply:FastifyReply, done
             return reply.code(402).send('Data token not valid')
         }
         
-        const userData: any = await prisma.users.findUnique({ where: { id: user.id } })        
+        const userData: userDAO = await prisma.users.findUnique({ where: { id: user.id } })        
         if(!userData){
             return reply.code(402).send('Invalid token')
         }

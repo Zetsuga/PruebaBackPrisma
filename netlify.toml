@@ -1,5 +1,5 @@
 [build]
-  command = "npm start"  # Utiliza npm start en lugar de npm run build
+  command = "npm start"  
   functions = "packages/*/functions"
 
 [[redirects]]
