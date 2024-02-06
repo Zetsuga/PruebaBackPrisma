@@ -8,9 +8,9 @@ const prisma = new PrismaClient()
 dotenv.config();
 
 cloudinary.v2.config({
-    cloud_name: 'dcljg8nww',
-    api_key: '967215433155685',
-    api_secret: 'zuBmB2FqJkDRHCzUuZ3gcUaJLEI',
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_KEY,
+    api_secret: process.env.CLOUD_SECRET,
     secure: true,
   });
   
