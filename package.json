@@ -9,8 +9,10 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:app": "npm run start --workspace=app",
-    "start:user": "npm run start --workspace=user"
+    "start:app": "cd packages/app && npm start",
+    "start:user": "cd packages/user && npm start",
+    "start:services": "cd packages/services && npm start",
+    "start":"npm-run-all start:app start:user start:services"
   },
   "repository": {
     "type": "git",
@@ -33,6 +35,7 @@
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20.11.10",
+    "npm-run-all": "^4.1.5",
     "prisma": "^5.9.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
