@@ -1,5 +1,6 @@
-import { imgDownloader, imgUploader } from "../../controller/img.controller";
 import { checkTokenJWT, validateUser } from "../middleware/auth.middleware";
+import { imgDownloader, imgUploader } from "../controller/img.controller";
+import { checkLogo } from "../middleware/img.middleware";
 import { FastifyInstance } from "fastify";
 
 const imgRoute = async(fastify:FastifyInstance) => {
@@ -8,7 +9,6 @@ const imgRoute = async(fastify:FastifyInstance) => {
     fastify.route({
         method:'GET',
         url:'/',
-        //onResponse:[checkTokenJWT,validateUser],
         preHandler:[checkTokenJWT,validateUser],
         handler:imgDownloader
     })
@@ -16,7 +16,12 @@ const imgRoute = async(fastify:FastifyInstance) => {
     fastify.route({
         method:'POST',
         url:'/',
-        preHandler:[checkTokenJWT,validateUser],
+        schema:{
+            body:{
+                content:{type:`file`}
+            }
+        },
+        preHandler:[checkTokenJWT,validateUser,checkLogo],
         handler:imgUploader
     })
 }

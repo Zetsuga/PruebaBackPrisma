@@ -2,35 +2,45 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { PrismaClient } from '@prisma/client';
 import * as JWT from 'jsonwebtoken'
 import dotenv from 'dotenv'
-import { UserRequest } from "../interfaces/user.interface";
+import { UserRequest, userDAO } from "../interfaces/user.interface";
 
 dotenv.config()
 const prisma = new PrismaClient()
 const JWT_key : any = process.env.JWT_KEY?process.env.JWT_KEY:'';
 
-export const checkTokenJWT = async(request: FastifyRequest, reply:FastifyReply, done: any)=>{
+export const checkTokenJWT = async(request: FastifyRequest, reply:FastifyReply, done: any) :Promise<void>=>{
     try{
         let tokenJWT: string | undefined = request.headers.authorization
         tokenJWT = tokenJWT?.replace('Bearer ','');
-        if(tokenJWT){
-            JWT.verify(tokenJWT, JWT_key, (err:any,decoded:any) =>{
-                if(err){
-                    return reply.code(402).send('Token expired')
-                }
-                done()
-            })
-        }else{
-            return reply.code(402).send('Token not found')
+        if (!tokenJWT) {
+            return reply.code(402).send('Token not found');
         }
+
+        await new Promise((resolve: any, reject: any) => {
+            JWT.verify(tokenJWT, JWT_key, (err: any, decoded: any) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(decoded);
+            });
+        });
+
     }catch(error : any){
-        return reply.code(400).send('Invalid token')
+        if (error.name === 'TokenExpiredError') {
+            return reply.code(402).send('Token expired');
+        } else {
+            return reply.code(400).send('Invalid token');
+        }
     }
 }
 
-export const validateUser = async(request: UserRequest, reply:FastifyReply, done: any)=>{
+export const validateUser = async(request: UserRequest, reply:FastifyReply, done: any) :Promise<void>=>{
     try {
-        let tokenJWT : any  = request.headers.authorization
-        tokenJWT = tokenJWT?.replace('Bearer ','');
+        let tokenJWT : string | undefined  = request.headers.authorization?.replace('Bearer ','');
+
+        if (!tokenJWT) {
+            return reply.code(402).send('Token not found');
+        }
 
         const user: any = JWT.verify(tokenJWT, JWT_key)
 
@@ -38,20 +48,20 @@ export const validateUser = async(request: UserRequest, reply:FastifyReply, done
             return reply.code(402).send('Data token not valid')
         }
         
-        const userData: any = await prisma.users.findUnique({ where: { id: user.id } })
+        const userData: userDAO = await prisma.users.findUnique({ where: { id: user.id } })        
         if(!userData){
             return reply.code(402).send('Invalid token')
         }
+        
         request.authUser = userData.id;
-        done();
     } catch (error) {
         return reply.code(400).send('Data token not valid')
     }
 }
 
-export const checkPermission = async(request: UserRequest, reply: FastifyReply, done:any) => {
+export const checkPermission = async(request: UserRequest, reply: FastifyReply, done:any) :Promise<void> => {
     try {
-        const dataUser : any = await prisma.users.findUnique(
+        const dataUser : userDAO = await prisma.users.findUnique(
             {
                 where:{
                     id : request['authUser']
@@ -61,7 +71,7 @@ export const checkPermission = async(request: UserRequest, reply: FastifyReply, 
         if(!dataUser || dataUser.role === 'admin'){
             reply.code(405).send('You dont have permission for this action')
         }
-        done();
+
     } catch (error: any) {
         return reply.code(400).send('Cont check permissions')
     }
