@@ -16,11 +16,6 @@ const imgRoute = async(fastify:FastifyInstance) => {
     fastify.route({
         method:'POST',
         url:'/',
-        schema:{
-            body:{
-                content:{type:`file`}
-            }
-        },
         preHandler:[checkTokenJWT,validateUser,checkLogo],
         handler:imgUploader
     })
