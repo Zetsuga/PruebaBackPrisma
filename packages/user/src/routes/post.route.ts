@@ -37,7 +37,7 @@ const postRoute = async (fastify:FastifyInstance)=>{
 
     fastify.route({
         method: 'PATCH',
-        url:'/',
+        url:'/:id',
         schema:{
             body:{
                 title:{type:'string'},
