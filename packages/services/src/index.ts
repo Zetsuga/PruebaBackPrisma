@@ -5,7 +5,7 @@ import fastifySwagger from '@fastify/swagger'
 import imgRoute from "./routes/img.route";
 
 const fastify :FastifyInstance = Fastify({
-    //logger:true
+    logger:true
 });
 
 fastify.register(fastifySwagger,options);

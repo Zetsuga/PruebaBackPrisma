@@ -12,7 +12,8 @@
     "build:app": "cd packages/app && npm run build",
     "build:user": "cd packages/user && npm run build",
     "build:services": "cd packages/services && npm run build",
-    "start": "npm-run-all prisma:generate build:app build:user build:services",
+    "build": "npm-run-all prisma:generate build:app build:user build:services",
+    "dev": "turbo dev --parallel --continue",
     "prisma:generate": "npx prisma generate"
   },
   "repository": {
@@ -45,6 +46,7 @@
     "prisma": "^5.9.1",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
+    "turbo": "^1.12.3",
     "typescript": "^5.3.3"
   }
 }
