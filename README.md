@@ -52,21 +52,9 @@ Después de crear el archivo ejecuta lo siguiente
   npm run prisma:generate
 ```
 
-Para lanzar las apis tienes que entrar en las tres apis y ejecutarlas en 3 terminales diferentes, haz lo siguiente:
-
-```bash API APP 
-  cd package/app
-  npm start
-```
-
-```bash API USER 
-  cd package/user
-  npm start
-```
-
-```bash API SERVICE 
-  cd package/service
-  npm start
+Para lanzar las apis tienes que lanzar el siguiente código en el raiz.
+```bash 
+  npm run dev
 ```
 
     
